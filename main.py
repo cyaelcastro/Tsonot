@@ -1,6 +1,7 @@
 import platform
 import sys
 import paho.mqtt.client as mqtt
+import json
 
 MQTT_BROKER = "192.168.15.195"
 MQTT_TOPICS = [("tsonot/1/browser/start",1),("tsonot/1/picture/start",1),("tsonot/1/video/start",1),("tsonot/1/browser/end",1),("tsonot/1/picture/end",1),("tsonot/1/video/end",1)]
@@ -18,6 +19,12 @@ def check_version():
 def check_os():
     print("OS: {0}".format(platform.system()))
     return platform.system()
+
+
+def load_commands(os):
+    with open("commands.json") as json_file:
+        commands = json.load(json_file)
+        return commands.get(os)
 
 
 def create_mqtt_conection():
@@ -79,6 +86,8 @@ if __name__  == "__main__":
     check_version()
     #Check OS to know how to handle system calls
     os = check_os()
+
+    commands = load_commands(os)
 
     mqtt_client = create_mqtt_conection()
     mqtt_client.loop_forever()

@@ -1,0 +1,12 @@
+{
+    "Linux":{
+        "browser": ["firefox", "-headless"],
+        "picture": ["eog", "--fullscreen"],
+        "video": ["vlc","-f","-R"]
+    },
+    "Windows":{
+        "browser": ["start", "chrome", "--kiosk"],
+        "picture": ["start", "wmplayer","/Schema:Picture", "/fullscreen"],
+        "video": ["start", "wmplayer", "/fullscreen"]
+    }
+}
