@@ -17,7 +17,7 @@ def check_version():
 
 def check_os():
     print("OS: {0}".format(platform.system()))
-    return platform.system() == "Windows"
+    return platform.system()
 
 
 def create_mqtt_conection():
@@ -78,7 +78,7 @@ if __name__  == "__main__":
     #Check Python version and raise an error if < 3.X
     check_version()
     #Check OS to know how to handle system calls
-    is_windows = check_os()
+    os = check_os()
 
     mqtt_client = create_mqtt_conection()
     mqtt_client.loop_forever()
