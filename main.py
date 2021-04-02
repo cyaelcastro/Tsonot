@@ -4,7 +4,9 @@ import paho.mqtt.client as mqtt
 import json
 
 MQTT_BROKER = "192.168.15.195"
-MQTT_TOPICS = [("tsonot/1/browser/start",1),("tsonot/1/picture/start",1),("tsonot/1/video/start",1),("tsonot/1/browser/end",1),("tsonot/1/picture/end",1),("tsonot/1/video/end",1)]
+MQTT_ROOT_TOPIC = "tsonot/1"
+MQTT_TOPICS = [(MQTT_ROOT_TOPIC+"/browser/start/+",1),(MQTT_ROOT_TOPIC+"/picture/start/+",1),
+                (MQTT_ROOT_TOPIC+"/video/start/+",1),(MQTT_ROOT_TOPIC+"/end",1)]
 #Flag to show the log in the MQTT connection
 LOG_ACTIVATED = 1
 
@@ -64,14 +66,6 @@ def on_message(client, userdata, message):
         print("message received " ,str(message.payload.decode("utf-8")))
         print("message qos=",message.qos)
     if message.topic == MQTT_TOPICS[3][0]:
-        print("message topic=",message.topic)
-        print("message received " ,str(message.payload.decode("utf-8")))
-        print("message qos=",message.qos)
-    if message.topic == MQTT_TOPICS[4][0]:
-        print("message topic=",message.topic)
-        print("message received " ,str(message.payload.decode("utf-8")))
-        print("message qos=",message.qos)
-    if message.topic == MQTT_TOPICS[5][0]:
         print("message topic=",message.topic)
         print("message received " ,str(message.payload.decode("utf-8")))
         print("message qos=",message.qos)
