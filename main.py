@@ -53,7 +53,10 @@ def check_file_exist(file_name):
 def run_command(command_list):
     print(command_list)
     
-    command_subprocess = subprocess.run(command_list, shell=True)
+    command_subprocess = subprocess.run(command_list, shell=True, capture_output=True, text=True)
+    
+    if command_subprocess.stderr:
+        print("stderror:", command_subprocess.stderr)
     
 
 def create_mqtt_conection(commands):
