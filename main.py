@@ -5,8 +5,9 @@ import json
 import subprocess
 from pathlib import Path
 import os
+import time
 
-MQTT_BROKER = "192.168.68.199"
+MQTT_BROKER = "192.168.68.113"
 MQTT_ROOT_TOPIC = "tsonot/1"
 MQTT_TOPICS = [(MQTT_ROOT_TOPIC+"/browser/start/+",1),(MQTT_ROOT_TOPIC+"/picture/start/+",1),
                 (MQTT_ROOT_TOPIC+"/video/start/+",1),(MQTT_ROOT_TOPIC+"/end",1)]
@@ -15,8 +16,9 @@ MQTT_TOPICS = [(MQTT_ROOT_TOPIC+"/browser/start/+",1),(MQTT_ROOT_TOPIC+"/picture
 BASE_LOCATION = "./media/"
 
 #Flag to show the log in the MQTT connection
-LOG_ACTIVATED = 1
+LOG_ACTIVATED = 0
 
+command_executed = []
 
 def check_version():
     print("Checking Python version")
@@ -43,21 +45,61 @@ def generate_command(mqtt_topic, command_json):
         command_list = command_json.get(mqtt_topic_levels[2])
         command_list.append(mqtt_topic_levels[4])
         command_list[-1] = Path(BASE_LOCATION+command_list[-1]).absolute()
-        run_command(command_list)
+        kill_command = command_json.get("kill_pid")
+        run_command(command_list, kill_command)
 
 
 def check_file_exist(file_name):
     return Path(BASE_LOCATION+file_name).exists()
 
 
-def run_command(command_list):
-    print(command_list)
+def run_command(command_list, kill_command):
     
+    #Declare commmand executed as global to record the last process executed
+    global command_executed
+
+    #In case of a previous process in execution
+    if command_executed:
+        execute_kill_command(command_executed, kill_command)
+
+    #Wait for killing the previous process
+    time.sleep(2)
+
+    print("Running process: ", command_list[1])
     command_subprocess = subprocess.run(command_list, shell=True, capture_output=True, text=True)
-    
+
+    #If the command_subprocess generate an error will be printed    
     if command_subprocess.stderr:
         print("stderror:", command_subprocess.stderr)
     
+    #Record the executed command in command_executed var
+    command_executed = command_list
+
+    #Return the executed command to previous state before adding the file
+    command_executed.pop()
+
+
+def execute_kill_command(command_list, kill_command):
+    
+    #Append name of the process to be killed to the kill command list
+    kill_command.append(command_list[1])
+    
+    #Add process extension
+    kill_command[-1]= kill_command[-1]+".exe"
+    
+    #Indicate what process is going to be killed
+    print("Killing process: ",kill_command[-1])
+
+    #Create the subprocess to execute the kill command, 
+    kill_subprocess = subprocess.run(kill_command, shell=True, text=True)
+    
+    #Show the return code of the subprocess, if not zero
+    if kill_subprocess.returncode != 0:
+        print("Killing process status: ",kill_subprocess.returncode)
+    
+    #Restore the command list to initial state, without process executed
+    kill_command.pop()
+
 
 def create_mqtt_conection(commands):
     client = mqtt.Client(client_id="Tsonot", userdata=commands)
