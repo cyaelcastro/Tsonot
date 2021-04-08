@@ -4,7 +4,7 @@ Ts'onot is the Mayan word for cenote, which means abyss or depth. The cenotes ar
 
 ## Project Description
 
-The project is a multimedia application that controls multimedia (Video, Pictures) or programs (Web browser) remotely. The main motivation is associate this project at [Hochob](https://github.com/hochob/hochob). Why in Hochob? Ts'onot is planned as a plugin to create an (even more) interactive experience.
+The project is an application that controls multimedia (Video, Pictures) or programs (Web browser) remotely. The main motivation is associate this project at [Hochob](https://github.com/hochob/hochob). Why in Hochob? Ts'onot is planned as a plugin to create an (even more) interactive experience.
 
 ## Supported Systems
 
