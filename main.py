@@ -49,7 +49,6 @@ def load_commands(os):
 #Integrate the command list from the MQTT Topics
 def generate_command(mqtt_topic, command_json):
 
-    print("host_os: ",host_os)
     #Split the topics to get the filename to be executed
     mqtt_topic_levels = mqtt_topic.split("/")
     if host_os == "Windows":
@@ -163,7 +162,12 @@ def on_message(client, userdata, message):
     
     #Topic of killing a process
     if message.topic == MQTT_TOPICS[3][0]:
-        pass
+        
+        #Generate the kill command if a command was previously executed
+        if command_executed:
+            generated_kill_command = generate_kill_command(userdata)
+            execute_kill_command(command_executed, generated_kill_command)
+
     #Topics of executing an application
     else:
         generate_command(message.topic, userdata)
