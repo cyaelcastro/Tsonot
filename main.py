@@ -63,7 +63,7 @@ def generate_command(mqtt_topic, command_json):
             #Obtain the file's absolute path
             command_list[-1] = Path(BASE_LOCATION+command_list[-1]).absolute()
             #Obtain the list "kill_pid" from command.json 
-            kill_command = command_json.get("kill_pid")
+            kill_command = generate_kill_command(command_json)
             #Execute the command from the generated lists
             run_command(command_list, kill_command)
 
@@ -98,6 +98,10 @@ def run_command(command_list, kill_command):
     #Return the executed command to previous state before adding the file
     command_executed.pop()
 
+
+#Function to generate kill command from json obtained in commands.json file
+def generate_kill_command(command_json):
+    return command_json.get("kill_pid")
 
 def execute_kill_command(command_list, kill_command):
     
