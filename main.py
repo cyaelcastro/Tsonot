@@ -21,6 +21,9 @@ LOG_ACTIVATED = 0
 #Global variable to record the last executed command
 command_executed = []
 
+#Global variable to record the host OS
+host_os = ""
+
 
 #Check Python version, requires Python 3.x
 def check_version():
@@ -46,22 +49,23 @@ def load_commands(os):
 #Integrate the command list from the MQTT Topics
 def generate_command(mqtt_topic, command_json):
 
+    print("host_os: ",host_os)
     #Split the topics to get the filename to be executed
     mqtt_topic_levels = mqtt_topic.split("/")
-
-    #Check if the file exist in the folder
-    if check_file_exist(mqtt_topic_levels[4]):
-        
-        #Get the command_list from command.json matching the action received in MQTT topic
-        command_list = command_json.get(mqtt_topic_levels[2])
-        #Append the file name in the command_list
-        command_list.append(mqtt_topic_levels[4])
-        #Obtain the file's absolute path
-        command_list[-1] = Path(BASE_LOCATION+command_list[-1]).absolute()
-        #Obtain the list "kill_pid" from command.json 
-        kill_command = command_json.get("kill_pid")
-        #Execute the command from the generated lists
-        run_command(command_list, kill_command)
+    if host_os == "Windows":
+        #Check if the file exist in the folder
+        if check_file_exist(mqtt_topic_levels[4]):
+            
+            #Get the command_list from command.json matching the action received in MQTT topic
+            command_list = command_json.get(mqtt_topic_levels[2])
+            #Append the file name in the command_list
+            command_list.append(mqtt_topic_levels[4])
+            #Obtain the file's absolute path
+            command_list[-1] = Path(BASE_LOCATION+command_list[-1]).absolute()
+            #Obtain the list "kill_pid" from command.json 
+            kill_command = command_json.get("kill_pid")
+            #Execute the command from the generated lists
+            run_command(command_list, kill_command)
 
 
 def check_file_exist(file_name):
@@ -170,10 +174,10 @@ if __name__  == "__main__":
     #Check Python version and raise an error if < 3.X
     check_version()
     #Check OS to know how to handle system calls
-    os = check_os()
+    host_os = check_os()
 
     #Load the commands from file based on the host OS 
-    commands = load_commands(os)
+    commands = load_commands(host_os)
 
     #Create the MQTT conection sending the commands as userdata
     mqtt_client = create_mqtt_conection(commands)
