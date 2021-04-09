@@ -2,7 +2,8 @@
     "Linux":{
         "browser": ["firefox", "-headless"],
         "picture": ["eog", "--fullscreen"],
-        "video": ["vlc","-f","-R"]
+        "video": ["vlc","-f","-R"],
+        "kill_pid": ["pkill"]
     },
     "Windows":{
         "browser": ["start", "chrome", "--kiosk"],
