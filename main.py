@@ -7,7 +7,7 @@ from pathlib import Path
 import os
 import time
 
-MQTT_BROKER = "192.168.68.113"
+MQTT_BROKER = "192.168.68.127"
 MQTT_ROOT_TOPIC = "tsonot/1"
 MQTT_TOPICS = [(MQTT_ROOT_TOPIC+"/browser/start/+",1),(MQTT_ROOT_TOPIC+"/picture/start/+",1),
                 (MQTT_ROOT_TOPIC+"/video/start/+",1),(MQTT_ROOT_TOPIC+"/end",1)]
@@ -51,21 +51,26 @@ def generate_command(mqtt_topic, command_json):
 
     #Split the topics to get the filename to be executed
     mqtt_topic_levels = mqtt_topic.split("/")
-    if host_os == "Windows":
-        #Check if the file exist in the folder
-        if check_file_exist(mqtt_topic_levels[4]):
-            
-            #Get the command_list from command.json matching the action received in MQTT topic
-            command_list = command_json.get(mqtt_topic_levels[2])
-            #Append the file name in the command_list
-            command_list.append(mqtt_topic_levels[4])
-            #Obtain the file's absolute path
-            command_list[-1] = Path(BASE_LOCATION+command_list[-1]).absolute()
+    #Check if the file exist in the folder
+    if check_file_exist(mqtt_topic_levels[4]):
+    
+        #Get the command_list from command.json matching the action received in MQTT topic
+        command_list = command_json.get(mqtt_topic_levels[2])
+        #Append the file name in the command_list
+        command_list.append(mqtt_topic_levels[4])
+        #Obtain the file's absolute path
+        command_list[-1] = Path(BASE_LOCATION+command_list[-1]).absolute()
+        
+        if host_os == "Windows":
+        
             #Obtain the list "kill_pid" from command.json 
             kill_command = generate_kill_command(command_json)
             #Execute the command from the generated lists
             run_command(command_list, kill_command)
 
+        elif host_os == "Linux":
+
+            pass
 
 def check_file_exist(file_name):
     #Check if the received file exist in the folder
