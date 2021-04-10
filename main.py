@@ -60,17 +60,12 @@ def generate_command(mqtt_topic, command_json):
         command_list.append(mqtt_topic_levels[4])
         #Obtain the file's absolute path
         command_list[-1] = Path(BASE_LOCATION+command_list[-1]).absolute()
-        
-        if host_os == "Windows":
-        
-            #Obtain the list "kill_pid" from command.json 
-            kill_command = generate_kill_command(command_json)
-            #Execute the command from the generated lists
-            run_command(command_list, kill_command)
+        #Obtain the list "kill_pid" from command.json 
+        kill_command = generate_kill_command(command_json)
 
-        elif host_os == "Linux":
-
-            pass
+        #Execute the command from the generated lists
+        run_command(command_list, kill_command)
+        
 
 def check_file_exist(file_name):
     #Check if the received file exist in the folder
