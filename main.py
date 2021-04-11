@@ -85,7 +85,7 @@ def run_command(command_list, kill_command):
     time.sleep(2)
 
     print("Running process: ", command_list[1])
-    command_subprocess = subprocess.run(command_list, shell=True, capture_output=True, text=True)
+    command_subprocess = subprocess.run(command_list, shell=True)
 
     #If the command_subprocess generate an error will be printed    
     if command_subprocess.stderr:
@@ -114,7 +114,7 @@ def execute_kill_command(command_list, kill_command):
     print("Killing process: ",kill_command[-1])
 
     #Create the subprocess to execute the kill command, 
-    kill_subprocess = subprocess.run(kill_command, shell=True, text=True)
+    kill_subprocess = subprocess.run(kill_command, shell=True)
     
     #Show the return code of the subprocess, if not zero
     if kill_subprocess.returncode != 0:
