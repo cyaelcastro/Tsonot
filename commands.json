@@ -1,6 +1,6 @@
 {
     "Linux":{
-        "browser": ["firefox", "-headless"],
+        "browser": ["firefox"],
         "picture": ["eog", "--fullscreen"],
         "video": ["vlc","-f","-R"],
         "kill_pid": ["pkill"]

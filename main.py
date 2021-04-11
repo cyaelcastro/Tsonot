@@ -59,7 +59,7 @@ def generate_command(mqtt_topic, command_json):
         #Append the file name in the command_list
         command_list.append(mqtt_topic_levels[4])
         #Obtain the file's absolute path
-        command_list[-1] = Path(BASE_LOCATION+command_list[-1]).absolute()
+        command_list[-1] = str(Path(BASE_LOCATION+command_list[-1]).absolute())
         #Obtain the list "kill_pid" from command.json 
         kill_command = generate_kill_command(command_json)
 
@@ -76,6 +76,9 @@ def run_command(command_list, kill_command):
     
     #Declare commmand executed as global to record the last process executed
     global command_executed
+
+    print("command_list",command_list)
+    print("kill_command",kill_command)
 
     #In case of a previous process in execution
     if command_executed:
