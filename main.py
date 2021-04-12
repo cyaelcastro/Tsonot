@@ -88,7 +88,13 @@ def run_command(command_list, kill_command):
     time.sleep(2)
 
     print("Running process: ", command_list[1])
-    command_subprocess = subprocess.run(command_list, shell=True)
+    
+    if host_os == "Windows":
+        command.subprocess = subprocess.run(command_list, shell=True)
+
+    if host_os == "Linux":
+        print("command_list",command_list)
+        command_subprocess = subprocess.Popen(command_list)
 
     #If the command_subprocess generate an error will be printed    
     if command_subprocess.stderr:
@@ -107,17 +113,20 @@ def generate_kill_command(command_json):
 
 def execute_kill_command(command_list, kill_command):
     
-    #Append name of the process to be killed to the kill command list
-    kill_command.append(command_list[1])
-    
-    #Add process extension
-    kill_command[-1]= kill_command[-1]+".exe"
+    if host_os == "Windows":
+        #Append name of the process to be killed to the kill command list
+        kill_command.append(command_list[1])
+        #Add process extension
+        kill_command[-1]= kill_command[-1]+".exe"
+        kill_subprocess = subprocess.run(kill_command, shell=True)
+        
+    elif host_os == "Linux":
+        #Append name of the process to be killed to the kill command list
+        kill_command.append(command_list[0])
+        kill_subprocess = subprocess.Popen(kill_command)
     
     #Indicate what process is going to be killed
     print("Killing process: ",kill_command[-1])
-
-    #Create the subprocess to execute the kill command, 
-    kill_subprocess = subprocess.run(kill_command, shell=True)
     
     #Show the return code of the subprocess, if not zero
     if kill_subprocess.returncode != 0:
