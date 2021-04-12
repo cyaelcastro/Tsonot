@@ -17,11 +17,11 @@ Operating Systems:
   * Videos: Windows Media Player
 
 
-* ~~Linux:~~ (WIP)
+* Linux:
 
-  * ~~Browser: Firefox~~
-  * ~~Pictures: Eog~~
-  * ~~Videos: VLC~~
+  * Browser: Firefox
+  * Pictures: Eog
+  * Videos: VLC
   
 
 
