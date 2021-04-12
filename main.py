@@ -7,7 +7,7 @@ from pathlib import Path
 import os
 import time
 
-MQTT_BROKER = "192.168.68.127"
+MQTT_BROKER = "192.168.15.72"
 MQTT_ROOT_TOPIC = "tsonot/1"
 MQTT_TOPICS = [(MQTT_ROOT_TOPIC+"/browser/start/+",1),(MQTT_ROOT_TOPIC+"/picture/start/+",1),
                 (MQTT_ROOT_TOPIC+"/video/start/+",1),(MQTT_ROOT_TOPIC+"/end",1)]
@@ -90,9 +90,9 @@ def run_command(command_list, kill_command):
     print("Running process: ", command_list[1])
     
     if host_os == "Windows":
-        command.subprocess = subprocess.run(command_list, shell=True)
+        command_subprocess = subprocess.run(command_list, shell=True)
 
-    if host_os == "Linux":
+    elif host_os == "Linux":
         print("command_list",command_list)
         command_subprocess = subprocess.Popen(command_list)
 
